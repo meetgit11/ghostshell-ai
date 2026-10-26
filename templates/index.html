@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GhostShell — Haunted AI Terminal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>👻</text></svg>">
+</head>
+<body>
+    <!-- Atmospheric ghost particles -->
+    <div id="particles" class="particles" aria-hidden="true"></div>
+
+    <!-- CRT scanline overlay -->
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-title">
+                <span class="ghost-icon">👻</span>
+                <h1>GhostShell</h1>
+            </div>
+            <p class="subtitle">A Haunted AI Terminal</p>
+            <div id="status-bar" class="status-bar">
+                <span id="status-indicator" class="status-indicator status-checking">
+                    <span class="status-dot"></span>
+                    <span id="status-text">Summoning spirits...</span>
+                </span>
+            </div>
+        </header>
+
+        <!-- Setup Banner (shown when Ollama/model unavailable) -->
+        <div id="setup-banner" class="setup-banner hidden">
+            <h3>🔧 Setup Required</h3>
+            <div id="setup-instructions"></div>
+        </div>
+
+        <!-- Tab Navigation -->
+        <nav class="tabs">
+            <button class="tab active" data-tab="explainer" type="button">
+                <span class="tab-icon">💀</span> Command Explainer
+            </button>
+            <button class="tab" data-tab="stories" type="button">
+                <span class="tab-icon">📖</span> Ghost Stories
+            </button>
+        </nav>
+
+        <!-- Command Explainer Panel -->
+        <section id="panel-explainer" class="panel active">
+            <div class="input-group">
+                <label for="command-input" class="input-label">
+                    Enter a terminal command to summon its explanation...
+                </label>
+                <div class="input-row">
+                    <span class="prompt-symbol">$</span>
+                    <input
+                        type="text"
+                        id="command-input"
+                        class="terminal-input"
+                        placeholder="e.g. chmod 777 /"
+                        maxlength="500"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button id="explain-btn" class="action-btn" type="button">
+                        <span class="btn-text">Explain</span>
+                        <span class="btn-loading hidden">Channeling...</span>
+                    </button>
+                </div>
+                <div class="suggestions" aria-label="Suggested commands">
+                    <span class="suggestions-label">Try:</span>
+                    <button class="chip" data-target="command-input" data-value="chmod 777 /">chmod 777 /</button>
+                    <button class="chip" data-target="command-input" data-value="rm -rf --no-preserve-root /">rm -rf /</button>
+                    <button class="chip" data-target="command-input" data-value="kill -9 1">kill -9 1</button>
+                    <button class="chip" data-target="command-input" data-value="git push --force origin main">git push --force</button>
+                    <button class="chip" data-target="command-input" data-value="dd if=/dev/zero of=/dev/sda">dd of=/dev/sda</button>
+                </div>
+            </div>
+            <div id="explain-output" class="output-area hidden">
+                <div class="output-header">
+                    <span>👻 The spirits speak:</span>
+                    <button id="copy-explain-btn" class="copy-btn" type="button" title="Copy to clipboard">📋 Copy</button>
+                </div>
+                <div id="explain-text" class="output-text"></div>
+            </div>
+        </section>
+
+        <!-- Ghost Story Panel -->
+        <section id="panel-stories" class="panel hidden">
+            <div class="input-group">
+                <label for="theme-input" class="input-label">
+                    Whisper a theme to conjure a tale of digital dread...
+                </label>
+                <div class="input-row">
+                    <span class="prompt-symbol">~</span>
+                    <input
+                        type="text"
+                        id="theme-input"
+                        class="terminal-input"
+                        placeholder="e.g. a database that remembers its deleted rows"
+                        maxlength="300"
+                        autocomplete="off"
+                        spellcheck="false"
+                    >
+                    <button id="story-btn" class="action-btn" type="button">
+                        <span class="btn-text">Conjure</span>
+                        <span class="btn-loading hidden">Summoning...</span>
+                    </button>
+                </div>
+                <div class="suggestions" aria-label="Suggested themes">
+                    <span class="suggestions-label">Try:</span>
+                    <button class="chip" data-target="theme-input" data-value="unresolved Git rebase conflict at 3 AM">git conflict at 3am</button>
+                    <button class="chip" data-target="theme-input" data-value="a memory leak that devours production server souls">memory leak</button>
+                    <button class="chip" data-target="theme-input" data-value="a haunted legacy codebase from 1999 that nobody understands">haunted legacy code</button>
+                    <button class="chip" data-target="theme-input" data-value="a phantom heisenbug that vanishes whenever you attach a debugger">phantom heisenbug</button>
+                </div>
+            </div>
+            <div id="story-output" class="output-area hidden">
+                <div class="output-header">
+                    <span>📖 A tale from the crypt:</span>
+                    <button id="copy-story-btn" class="copy-btn" type="button" title="Copy to clipboard">📋 Copy</button>
+                </div>
+                <div id="story-text" class="output-text"></div>
+            </div>
+        </section>
+
+        <!-- Error Display -->
+        <div id="error-display" class="error-display hidden">
+            <span class="error-icon">⚠️</span>
+            <span id="error-text"></span>
+            <button id="error-dismiss" class="error-dismiss" type="button">&times;</button>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by <a href="https://ollama.com" target="_blank" rel="noopener">Ollama</a> · No data leaves your machine · <a href="https://github.com/meetgit11/ghostshell-ai" target="_blank" rel="noopener">GitHub</a></p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
