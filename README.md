@@ -180,7 +180,10 @@ OLLAMA_MODEL=mistral python app.py
 
 ## 📸 Screenshots
 
-> Screenshots will be added after first successful deployment.
+> Screenshots will be added after first successful deployment.<img width="607" height="596" alt="image" src="https://github.com/user-attachments/assets/b70e2391-7da9-4f8b-a4a6-0e68e2f64969" />
+<img width="565" height="572" alt="image" src="https://github.com/user-attachments/assets/73dc00ab-8cce-4219-ba3d-6d58f23e5a17" />
+
+
 
 <!-- 
 ![GhostShell UI](screenshots/main-ui.png)
